@@ -1,0 +1,56 @@
+本地库新建
+  1、新建文件夹
+     git init 文件名
+  2、vim编写本地库文件
+     进入文件夹
+	 cd 文件名
+	 打开vim编辑器
+	 vim 文件名.后缀
+  3、上传到暂存区
+     git add 文件名
+  4、上传到本地库
+     git commit -m"日志" 文件名
+	 
+建立远程库
+  打开GitHub
+  在GitHub中选择new repository 新建远程库
+  
+  https://github.com/Thinklongandhard/wuhantest.git  远程库地址
+  
+  在git中保存远程库
+  $ git remote add test //github.com/Thinklongandhard/wuhantest.gitte
+  add：添加  test：（给远程库地址起的别名）
+  
+  $ git remote -v
+test    //github.com/Thinklongandhard/wuhantest.gitte (fetch)  
+test    //github.com/Thinklongandhard/wuhantest.gitte (push)
+ 
+  fetch：取回   push：推送
+  
+上传到远程库
+  git push -u 远程库别名 上传文件的分支
+  git push -u test main
+  
+克隆操作
+  操作
+     git clone git@github.com:Thinklongandhard/wuhantest.git(远程库地址)
+Cloning into 'wuhantest'...
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Total 3 (delta 0), reused 3 (delta 0), pack-reused 0
+Receiving objects: 100% (3/3), done.
+
+效果：
+  1、完整的把远程库下载到本地
+  2、创建test远程地址别名
+  3、初始化本地库
+  
+拉取
+  先进行拉
+     git fetch test main 
+	    test：本地库别名 main：分支名
+  合并
+     git merge 库名 新增的分支名/main的分支名
+
+  
+  
