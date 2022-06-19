@@ -1,0 +1,156 @@
+创建文件夹
+   mkdir 文件名
+进入文件夹：
+   cd 文件夹名称
+单独显示最新更改的几行
+   tail -n 3 文件名
+
+1、本地库初始化：
+   git init  :初始化一个命令仓库   ---> 创建了一个.git目录
+   以.开头的目录都是隐藏的资源
+   //本地库中相关的子目录和文件，不能删除和胡乱修改
+   -rw-r--r-- 1 罗志嘉 197121  23 Jun  8 13:34 HEAD
+   -rw-r--r-- 1 罗志嘉 197121 130 Jun  8 13:34 config         //对项目的配置
+   -rw-r--r-- 1 罗志嘉 197121  73 Jun  8 13:34 description
+   drwxr-xr-x 1 罗志嘉 197121   0 Jun  8 13:34 hooks/
+   drwxr-xr-x 1 罗志嘉 197121   0 Jun  8 13:34 info/ 
+   drwxr-xr-x 1 罗志嘉 197121   0 Jun  8 13:34 objects/
+   drwxr-xr-x 1 罗志嘉 197121   0 Jun  8 13:34 refs/
+   
+   设置签名：
+      形式： 
+	    用户名 ： tom
+		Email地址： goodMoring@atguigu.com
+		作用：区分不同开发人员的身份
+		这里设置的签名和代码托管中心设置的账号密码没有一点关系
+		
+		命令：
+		  1、项目级别/仓库级别
+		  （git config user.name tom_por）
+		  （git config user.email goodMoring_pro@atguigu.com）
+		      仅在当前本地库范围内有效
+//信息保存位置
+$ cat .git/config
+[core]
+        repositoryformatversion = 0
+        filemode = false
+        bare = false
+        logallrefupdates = true
+        symlinks = false
+        ignorecase = true
+[user]
+        name = tom_pro
+        email = goodMorning_pro@luozhijia.com
+
+
+
+		  2、系统用户级别
+		  （git config--global user.name flyingfat_glb）
+		  （git config--global goodMoring_pro@atguigu.com）
+		      登录当前操作系统的用户范围
+		 优先级：
+		   就近原则，项目级别优先于系统用户级别，二者都有时，
+		   采用项目级别的签名
+		   如果只有系统用户级别的签名。就以系统用户级别的签名
+		   （二者都没有是不允许的）
+		   
+   打开vim编辑器：
+   进入后先按i开启编辑模式
+   vim 文件名
+   编辑结束后按esc退出编辑模式然后英文输入
+    :输入git命令
+   git status  //将现场储藏起来(状态查看操作)
+   查看工作区、暂存区的状态
+   git add 文件名  //追踪 （暂存）
+   git rm --cached 文件名  //退出暂存状态
+   git commit 文件名： //上传 （提交到本地库）
+   
+   【（提交完成后）
+     [master (root-commit) 3c896a7] my first commit file good.txt   
+	  //3c896a7] 相当于版本号  (root-commit) 根提交
+     1 file changed, 3 insertions(+)
+	  //一个文件被修改了 ， 有三行
+     create mode 100644 good.txt】
+	 
+	 进行修改以后 git status
+	  (use "git add" and/or "git commit -a")
+	  可以用git add 添加到暂存区然后上传
+	  也可以直接上传
+	  git commit -m "对本次修改的解释" 文件名
+	  
+	  
+实现版本的前进和后退
+(多屏显示控制： 空格向下翻页，b向上翻页，q退出)
+    1、查看版本的历史记录
+	   git log
+	  (git log --pretty=oneline)  //以一行的形式显示
+	  (git log --oneline)         //以一行的形式显示hash值只显示一部分
+	  (git reflog)         //以一行的形式显示hash值只显示一部分
+	  {937ce50 (HEAD -> master) HEAD@{0}: commit: my fore commit,modify the file
+3ec4541 HEAD@{1}: commit: my three commit,modify the file   //head移动次数
+d6e0970 HEAD@{2}: commit: My second commit,modify good.txt
+3c896a7 HEAD@{3}: commit: my first commit file good.txt
+5fb80af HEAD@{4}: commit (initial): morning.txt
+       }
+	   
+	2、前进后退
+	（1、基于 索引值操作【推荐】
+	     操作hash值
+		 git reset --hard [hash局部索引值]   //后退/前进
+	（2、使用^符号   //只能后退
+	     git reset --hard HEAD^  (加一个^符号，往后退一步)
+	（3、使用~符号   //只能后退
+	     git reset --hard HEAD~3  (后退几步，~后跟几)
+		 
+	reset命令的三个参数：
+	    --soft参数    //仅仅在本地库移动指针
+		--mixed参数   //在本地库移动指针，重置暂存区
+		--hard参数    //在本地库移动指针，重置暂存区，重置工作区
+		
+删除：
+    rm 文件名
+	
+	删除的文件找回
+	  前提： 删除前，文件存在时的状态提交到了本地库
+	  操作：git reset --hard[指针位置]
+	     删除操作已经提交到本地库：指针位置指向历记录
+		 删除操作尚未提交到本地库：指针位置使用HEAD
+		 
+比较文件：
+    修改后的文件可以使用
+	  git diff 文件名  将工作区中的文件和暂存区中的文件进行比较
+	  git diff[本地库中历版本（HEAD）] 文件名
+	    将工作区的文件与历版本的文件进行比较
+	  git diff 
+	    和所有历史版本进行比较
+		
+		
+分支管理
+   概述：
+      在版本控制过程中，使用多条线同时推进多个任务  （多线程）
+	 
+	操作：
+	  git branch 分支名 //创建分支
+	  git branch -v     //查看分支
+	  git checkout hot_fix(分支名)  //切换分支，checkout + 分支名
+	  合并分支：
+	    1、切换到要接受修改的分支上
+		2、执行merge命令
+【$ git merge hot_fix
+
+  Updating 1513d61..e7b1123
+  Fast-forward
+  good.txt | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)】
+		
+	产生冲突：
+	  不同分支在同一时间对同一位置进行了修改
+	  合并时产生冲突
+	  
+	解决冲突：
+	  打开当前分支的vim编辑器，进行修改
+	  （删除特殊符号）
+
+	  修改后正常git add添加到暂存
+	  到暂存后不能 git commit + 文件名
+	  直接git commit 就行，文件日志正常添加
